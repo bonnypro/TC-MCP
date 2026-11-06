@@ -1,0 +1,1734 @@
+{
+  "version": 2,
+  "updated": "2026-11-02",
+  "description": "TC-MCP knowledge-source registry. This file is the Linux-sources-like list used by /update. It contains locations and update rules only, never credentials.",
+  "sources": [
+    {
+      "id": "beckhoff_download",
+      "name": "Beckhoff Download",
+      "category": "official",
+      "kind": "documents",
+      "enabled": true,
+      "auth": "none",
+      "url": "https://download.beckhoff.com/",
+      "check_url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_Installation_EN.pdf",
+      "note": "official PDF manuals",
+      "documents": [
+        {
+          "id": "mc3_pdf",
+          "kind": "pdf",
+          "product": "MC3",
+          "version": "1.3.0",
+          "url": "https://download.beckhoff.com/download/Document/automation/twincat3/TF55xx_TC3_MC3_EN.pdf"
+        },
+        {
+          "id": "te1300_pdf",
+          "kind": "pdf",
+          "product": "Scope",
+          "version": "1.23.0",
+          "url": "https://download.beckhoff.com/download/Document/automation/twincat3/TE13xx_TwinCAT_3_ScopeView_EN.pdf"
+        },
+        {
+          "id": "tc3_installation",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.3.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_Installation_EN.pdf"
+        },
+        {
+          "id": "tc3_automation_interface",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.7.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_Automation_Interface_EN.pdf"
+        },
+        {
+          "id": "tc3_ads_powershell",
+          "kind": "pdf",
+          "product": "ADS",
+          "version": "1.5.0",
+          "url": "https://download.beckhoff.com/download/Document/automation/twincat3/TwinCAT_3_ADS_Powershell_Module_EN.pdf"
+        },
+        {
+          "id": "tf50x0_nc_ptp",
+          "kind": "pdf",
+          "product": "NC PTP",
+          "version": "2.7.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF50x0_TC3_NC_PTP_EN.pdf"
+        },
+        {
+          "id": "tf5100_nc_i",
+          "kind": "pdf",
+          "product": "NC I",
+          "version": "2.15.3",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5100_TC3_NC_I_EN.pdf"
+        },
+        {
+          "id": "ethercat_system",
+          "kind": "pdf",
+          "product": "EtherCAT",
+          "version": "6.1.0",
+          "url": "https://download.beckhoff.com/download/Document/io/ethercat-terminals/EtherCATSystem_en.pdf"
+        },
+        {
+          "id": "tf5200_programming",
+          "kind": "pdf",
+          "product": "CNC",
+          "version": "1.33",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_programming_manual_en.pdf"
+        },
+        {
+          "id": "tf5200_diagnosis",
+          "kind": "pdf",
+          "product": "CNC",
+          "version": "1.26",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_diagnosis_en.pdf"
+        },
+        {
+          "id": "tf5200_system_parameter",
+          "kind": "pdf",
+          "product": "CNC",
+          "version": "1.08",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_system_parameter_en.pdf"
+        },
+        {
+          "id": "tf7xxx_vision",
+          "kind": "pdf",
+          "product": "Vision",
+          "version": "2.5.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF7000-TF7810_TC3_Vision_EN.pdf"
+        },
+        {
+          "id": "pdf_ads_over_mqtt_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.6.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/ADS-over-MQTT_EN.pdf"
+        },
+        {
+          "id": "pdf_amsnat_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/AmsNAT_EN.pdf"
+        },
+        {
+          "id": "pdf_eap_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.7.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/EAP_EN.pdf"
+        },
+        {
+          "id": "pdf_licensing_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.20.7",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/Licensing_EN.pdf"
+        },
+        {
+          "id": "pdf_secure_ads_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/Secure_ADS_EN.pdf"
+        },
+        {
+          "id": "pdf_software_protection_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.17.8",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/Software_Protection_EN.pdf"
+        },
+        {
+          "id": "pdf_tc3_ads_net_v7_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_ADS_NET_V7_EN.pdf"
+        },
+        {
+          "id": "pdf_tc3_eventlogger_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.11.5",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_EventLogger_EN.pdf"
+        },
+        {
+          "id": "pdf_tc3_hmi_process_library_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.0.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_HMI_Process_Library_EN.pdf"
+        },
+        {
+          "id": "pdf_tc3_multiuser_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.7.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_Multiuser_EN.pdf"
+        },
+        {
+          "id": "pdf_tc3_project_compare_tool_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.0.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_Project_Compare_Tool_EN.pdf"
+        },
+        {
+          "id": "pdf_tc3_remote_manager_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_Remote_Manager_EN.pdf"
+        },
+        {
+          "id": "pdf_tc3_sourcecontrol_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_SourceControl_EN.pdf"
+        },
+        {
+          "id": "pdf_tc3_user_interface_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.15.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TC3_User_Interface_EN.pdf"
+        },
+        {
+          "id": "pdf_te1000_tc3_c_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.19.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1000_TC3_C_EN.pdf"
+        },
+        {
+          "id": "pdf_te1010_tc3_realtime_monitor_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.2.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1010_TC3_Realtime_Monitor_EN.pdf"
+        },
+        {
+          "id": "pdf_te1030_tc3_documentation_generation_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.3",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1030_TC3_Documentation_Generation_EN.pdf"
+        },
+        {
+          "id": "pdf_te1111_tc3_ethercat_simulation_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.5.3",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1111_TC3_EtherCAT_Simulation_EN.pdf"
+        },
+        {
+          "id": "pdf_te1120_tc3_xcad_interface_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1120_TC3_XCAD_Interface_EN.pdf"
+        },
+        {
+          "id": "pdf_te1130_tc3_interface_for_inventor_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.0.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1130_TC3_Interface_for_Inventor_EN.pdf"
+        },
+        {
+          "id": "pdf_te1200_tc3_plc_static_analysis_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.11.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1200_TC3_PLC_Static_Analysis_EN.pdf"
+        },
+        {
+          "id": "pdf_te1210_tc3_plc_profiler_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1210_TC3_PLC_Profiler_EN.pdf"
+        },
+        {
+          "id": "pdf_te131x_tc3_filter_designer_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE131x_TC3_Filter_Designer_EN.pdf"
+        },
+        {
+          "id": "pdf_te132x_tc3_bodeplot_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE132x_TC3_BodePlot_EN.pdf"
+        },
+        {
+          "id": "pdf_te1400_tc3_simulink_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.6.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1400_TC3_SIMULINK_EN.pdf"
+        },
+        {
+          "id": "pdf_te1401_tc3_matlab_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1401_TC3_MATLAB_EN.pdf"
+        },
+        {
+          "id": "pdf_te1402_tc3_target_for_embedded_coder_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1402_TC3_Target_For_Embedded_Coder_EN.pdf"
+        },
+        {
+          "id": "pdf_te1410_tc3_interface_matlab_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1410_TC3_Interface_Matlab_EN.pdf"
+        },
+        {
+          "id": "pdf_te1420_tc3_target_for_fmi_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1420_TC3_Target_for_FMI_EN.pdf"
+        },
+        {
+          "id": "pdf_te1421_tc3_simulation_runtime_for_fmi_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1421_TC3_Simulation_Runtime_for_FMI_EN.pdf"
+        },
+        {
+          "id": "pdf_te1500_tc3_valve_diagram_editor_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1500_TC3_Valve_Diagram_Editor_EN.pdf"
+        },
+        {
+          "id": "pdf_te1510_tc3_cam_design_tool_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1510_TC3_CAM_Design_Tool_EN.pdf"
+        },
+        {
+          "id": "pdf_te1610_tc3_eap_configurator_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.6.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE1610_TC3_EAP_Configurator_EN.pdf"
+        },
+        {
+          "id": "pdf_te2000_tc3_frameworkapi_en",
+          "kind": "pdf",
+          "product": "HMI",
+          "version": "2.18.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE2000_TC3_FrameworkAPI_EN.pdf"
+        },
+        {
+          "id": "pdf_te2000_tc3_hmi_en",
+          "kind": "pdf",
+          "product": "HMI",
+          "version": "2.18.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE2000_TC3_HMI_EN.pdf"
+        },
+        {
+          "id": "pdf_te2000_tc3_serverapi_en",
+          "kind": "pdf",
+          "product": "HMI",
+          "version": "2.18.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE2000_TC3_ServerAPI_EN.pdf"
+        },
+        {
+          "id": "pdf_te3500_tc3_analytics_workbench_en",
+          "kind": "pdf",
+          "product": "Analytics",
+          "version": "1.15.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE3500_TC3_Analytics_Workbench_EN.pdf"
+        },
+        {
+          "id": "pdf_te3510_tc3_analytics_vision_en",
+          "kind": "pdf",
+          "product": "Analytics",
+          "version": "1.0.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE3510_TC3_Analytics_Vision_EN.pdf"
+        },
+        {
+          "id": "pdf_te3520_tc3_analytics_service_tool_en",
+          "kind": "pdf",
+          "product": "Analytics",
+          "version": "1.6.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE3520_TC3_Analytics_Service_Tool_EN.pdf"
+        },
+        {
+          "id": "pdf_te3850_tc3_machine_learning_creator_en",
+          "kind": "pdf",
+          "product": "Analytics",
+          "version": "1.0.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE3850_TC3_Machine_Learning_Creator_EN.pdf"
+        },
+        {
+          "id": "pdf_te5960_tc3_autotuning_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE5960_TC3_Autotuning_EN.pdf"
+        },
+        {
+          "id": "pdf_te6100_tc3_opc_ua_nodeset_editor_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.3.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE6100_TC3_OPC_UA_Nodeset_Editor_EN.pdf"
+        },
+        {
+          "id": "pdf_te8400_tc3_mtp_engineering_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.2.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TE8400_TC3_MTP_Engineering_EN.pdf"
+        },
+        {
+          "id": "pdf_tf1200_tc3_ui_client_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF1200_TC3_UI_Client_EN.pdf"
+        },
+        {
+          "id": "pdf_tf1800_tc3_plc_hmi_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF1800_TC3_PLC_HMI_EN.pdf"
+        },
+        {
+          "id": "pdf_tf1810_tc3_plc_hmi_web_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF1810_TC3_PLC_HMI_Web_EN.pdf"
+        },
+        {
+          "id": "pdf_tf2000_tc3_hmi_server_en",
+          "kind": "pdf",
+          "product": "HMI",
+          "version": "1.8.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF2000_TC3_HMI_Server_EN.pdf"
+        },
+        {
+          "id": "pdf_tf3500_tc3_analytics_logger_en",
+          "kind": "pdf",
+          "product": "Analytics",
+          "version": "1.6.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF3500_TC3_Analytics_Logger_EN.pdf"
+        },
+        {
+          "id": "pdf_tf3510_tc3_analytics_library_en",
+          "kind": "pdf",
+          "product": "Analytics",
+          "version": "1.6.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF3510_TC3_Analytics_Library_EN.pdf"
+        },
+        {
+          "id": "pdf_tf3550_tc3_analytics_runtime_en",
+          "kind": "pdf",
+          "product": "Analytics",
+          "version": "1.3.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF3550_TC3_Analytics_Runtime_EN.pdf"
+        },
+        {
+          "id": "pdf_tf3600_tc3_conditionmonitoring_en",
+          "kind": "pdf",
+          "product": "Analytics",
+          "version": "1.12.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF3600_TC3_ConditionMonitoring_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5050_tc3_nc_camming_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.9.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5050_TC3_NC_Camming_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5055_tc3_nc_flying_saw_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.6.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5055_TC3_NC_Flying_Saw_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5110_tf5113_tc3_kinematic_transformation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "2.3.6",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5110-TF5113_TC3_Kinematic_Transformation_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5200_ads_access_to_cnc_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.052",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_ads_access_to_cnc_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_advance_calculation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.25",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_advance_calculation_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_axis_collision_mon_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_axis_collision_mon_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_axis_compensation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.52",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_axis_compensation_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_axis_compensation_parameters_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.26",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_axis_compensation_parameters_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_axis_coupling_hli_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.032",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_axis_coupling_hli_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_axis_filter_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.06",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_axis_filter_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_axis_parameter_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.174",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_axis_parameter_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_axis_position_lag_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.08",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_axis_position_lag_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_axis_position_monitoring_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.07",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_axis_position_monitoring_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_blocksearch_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.06",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_blocksearch_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_channel_parameter_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.34",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_channel_parameter_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_clamp_position_offsets_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.16",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_clamp_position_offsets_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_commissioning_axis_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.06",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_commissioning_axis_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_commissioning_kinematic_transformation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.05",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_commissioning_kinematic_transformation_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_contour_lookahead_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_contour_lookahead_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_contour_visualization_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.16",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_contour_visualization_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_coordinate_systems_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.05",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_coordinate_systems_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_data_streaming_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.06",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_data_streaming_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_diagnosis_upload_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.031",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_diagnosis_upload_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_direct_data_transfer_hli_drive_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_direct_data_transfer_hli_drive_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_distance_control_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.5",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_distance_control_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_drive_cmd_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_drive_cmd_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_driving_fixed_stop_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_driving_fixed_stop_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_dyn_coordinate_system_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_dyn_coordinate_system_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_dynamic_param_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.07",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_dynamic_param_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_dynposlimit_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_dynposlimit_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_encryption_of_ncprogr_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.32",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_encryption_of_ncprogr_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_error_management_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.07",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_error_management_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_export_external_variables_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.24",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_export_external_variables_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_external_toolmanagement_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.05",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_external_toolmanagement_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_external_variables_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.16",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_external_variables_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_feedforward_control_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.052",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_feedforward_control_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_filecaching_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.05",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_filecaching_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_fir_filter_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.02",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_fir_filter_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_forward_backward_onpath_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.06",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_forward_backward_onpath_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_friction_comp_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.06",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_friction_comp_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_gantry_operation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.052",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_gantry_operation_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_hli_interface_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.23",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_hli_interface_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_homing_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.21",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_homing_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_improved_pos_ctrl_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_improved_pos_ctrl_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_insert_stop_cmd_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.141",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_insert_stop_cmd_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_interface_external_combination_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.02",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_interface_external_combination_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_jobmanager_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.02",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_jobmanager_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_jog_of_path_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.17",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_jog_of_path_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_lift_axis_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.13",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_lift_axis_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_m_and_h_func_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.062",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_m_and_h_func_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_manual_mode_offset_limit_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.082",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_manual_mode_offset_limit_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_manual_mode_parameter_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.17",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_manual_mode_parameter_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_measurement_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_measurement_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_multicore_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.051",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_multicore_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_online_tool_compensation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.06",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_online_tool_compensation_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_oscillating_axis_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.032",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_oscillating_axis_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_rts_status_info_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.06",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_rts_status_info_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_service_interface_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.03",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_service_interface_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_single_step_mode_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.14",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_single_step_mode_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_skipping_of_nc_blocks_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_skipping_of_nc_blocks_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_software_limit_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.23",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_software_limit_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_spindle_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.06",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_spindle_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_spindle_operation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.05",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_spindle_operation_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_startup_list_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.183",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_startup_list_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_syntax_check_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_syntax_check_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_tool_data_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.081",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_tool_data_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_trafo_interface_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.12",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_trafo_interface_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_turning_functions_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.091",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_turning_functions_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_velocity_smoothing_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_velocity_smoothing_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_vibration_guard_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.04",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_vibration_guard_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_volumetric_comp_params_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.15",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_volumetric_comp_params_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_workspace_monitoring_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.25",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_workspace_monitoring_en.pdf"
+        },
+        {
+          "id": "pdf_tf5200_zero_offsets_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.15",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5200_zero_offsets_en.pdf"
+        },
+        {
+          "id": "pdf_tf5225_tc3_cnc_cycles_measurement_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.322",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5225_tc3_cnc_cycles_measurement_en.pdf"
+        },
+        {
+          "id": "pdf_tf5240_couple_kinematics_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.08",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5240_couple_kinematics_en.pdf"
+        },
+        {
+          "id": "pdf_tf5240_kinematic_transformation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.34",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5240_kinematic_transformation_en.pdf"
+        },
+        {
+          "id": "pdf_tf5240_pcs_trafo_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.01",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5240_pcs_trafo_en.pdf"
+        },
+        {
+          "id": "pdf_tf5240_universal_kinematic_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.183",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5240_universal_kinematic_en.pdf"
+        },
+        {
+          "id": "pdf_tf5240_velocity_limit_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5240_velocity_limit_en.pdf"
+        },
+        {
+          "id": "pdf_tf5245_tc3_cnc_cycles_kinopt_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.319",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5245_tc3_cnc_cycles_kinopt_en.pdf"
+        },
+        {
+          "id": "pdf_tf5250_hsc_pack_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "2.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5250_hsc_pack_en.pdf"
+        },
+        {
+          "id": "pdf_tf5261_realtime_cycles_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.13",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5261_realtime_cycles_en.pdf"
+        },
+        {
+          "id": "pdf_tf5261_realtime_loops_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.14",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5261_realtime_loops_en.pdf"
+        },
+        {
+          "id": "pdf_tf5262_tc3_cnc_online_adaption_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5262_tc3_cnc_online_adaption_en.pdf"
+        },
+        {
+          "id": "pdf_tf5263_tc3_cnc_extended_interpolation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5263_tc3_cnc_extended_interpolation_en.pdf"
+        },
+        {
+          "id": "pdf_tf5264_conveyor_tracking_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.02",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5264_conveyor_tracking_en.pdf"
+        },
+        {
+          "id": "pdf_tf527x_kernelv_api_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "2.1.60",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF527x_kernelv_api_en.pdf"
+        },
+        {
+          "id": "pdf_tf5280_volumetric_comp_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.061",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5280_volumetric_comp_en.pdf"
+        },
+        {
+          "id": "pdf_tf5290_cnc_cutting_plus_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.03",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5290_cnc_cutting_plus_en.pdf"
+        },
+        {
+          "id": "pdf_tf5291_tc3_cnc_am_plus_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5291_tc3_cnc_am_plus_en.pdf"
+        },
+        {
+          "id": "pdf_tf5292_tc3_cnc_edm_plus_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.02",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5292_tc3_cnc_edm_plus_en.pdf"
+        },
+        {
+          "id": "pdf_tf5293_tc3_cnc_cycles_millingbase_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.041",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5293_tc3_cnc_cycles_millingbase_en.pdf"
+        },
+        {
+          "id": "pdf_tf52xx_tc3_cnc_cycles_additionalcycles_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF52xx_tc3_cnc_cycles_additionalcycles_en.pdf"
+        },
+        {
+          "id": "pdf_tf5810_tc3_hydraulic_positioning_en",
+          "kind": "pdf",
+          "product": "Motion/CNC/Vision",
+          "version": "1.9.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5810_TC3_Hydraulic_Positioning_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6100_tc3_opc_ua_client_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.3.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6100_TC3_OPC_UA_Client_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6100_tc3_opc_ua_configurator_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6100_TC3_OPC_UA_Configurator_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6100_tc3_opc_ua_gateway_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.1.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6100_TC3_OPC_UA_Gateway_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6100_tc3_opc_ua_server_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.6.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6100_TC3_OPC_UA_Server_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6105_tc3_opc_ua_pub_sub_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "2.0.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6105_TC3_OPC_UA_Pub_Sub_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6225_tc3_ethercat_external_sync_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.2.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6225_TC3_EtherCAT_External_Sync_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6230_tc3_parallel_redundancy_protocol_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.0.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6230_TC3_Parallel_Redundancy_Protocol_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6250_tc3_modbus_tcp_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.7.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6250_TC3_Modbus_TCP_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6255_tc3_modbus_rtu_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.4.3",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6255_TC3_Modbus_RTU_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6270_tc3_profinet_rt_device_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6270_TC3_Profinet_RT_Device_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6271_tc3_profinet_rt_controller_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6271_TC3_Profinet_RT_Controller_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6280_ethernet_ip_adapter_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.4.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6280_EtherNet_IP_Adapter_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6281_tc3_ethernetip_scanner_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.8.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6281_TC3_EthernetIP_Scanner_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6701_tc3_iot_communication_mqtt_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.13.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6701_TC3_IoT_Communication_MQTT_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6710_tc3_iot_functions_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6710_TC3_IoT_Functions_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6720_tc3_iot_data_agent_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.5.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6720_TC3_IoT_Data_Agent_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6730_tc3_iot_communicator_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.13.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6730_TC3_IoT_Communicator_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6760_tc3_iot_https_rest_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.13.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6760_TC3_IoT_https_rest_en.pdf"
+        },
+        {
+          "id": "pdf_tf6770_tc3_iot_websockets_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6770_TC3_IoT_WebSockets_EN.pdf"
+        },
+        {
+          "id": "pdf_tf6771_tc3_iot_ocpp_en",
+          "kind": "pdf",
+          "product": "Fieldbus/IoT",
+          "version": "1.1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF6771_TC3_IoT_OCPP_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_ads_intro_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.6.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_ADS_INTRO_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_ads_net_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_ADS_NET_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_basics_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_Basics_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_io_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.3.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_IO_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "3.7.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_pjlink_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_PJLink_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_coupler_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_Coupler_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_dali_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.3.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_DALI_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_dmx_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.8.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_DMX_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_dataexchange_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.2.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_DataExchange_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_drive_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4.8",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_Drive_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_eib_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.16.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_EIB_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_enocean_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.7.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_EnOcean_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_ethercat_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.10.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_EtherCAT_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_genibus_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.6.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_GENIbus_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_iofunctions_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.5.3",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_IoFunctions_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_lon_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.6.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_LON_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_mbus_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.8.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_MBus_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_mc2_drive_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.15.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_MC2_Drive_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_mc2_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.18.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_MC2_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_mdp_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.7.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_MDP_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_mpbus_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.13.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_MPBus_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_math_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.3",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_Math_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_ncdrive_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.2.9",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_NcDrive_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_profinetdiag_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.0.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_ProfinetDiag_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_smi_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.9.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_SMI_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_sups_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.5.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_SUPS_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_standard_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.3.4",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_Standard_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_systemc69xx_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_SystemC69xx_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_systemcx_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.6.4",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_SystemCX_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_system_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.17.3",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_System_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc2_utilities_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.18.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc2_Utilities_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_ba2_common_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.0.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_BA2_Common_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_ba_common_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.2.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_BA_Common_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_dali_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.22.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_DALI_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_drivemotioncontrol_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.5.5",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_DriveMotionControl_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_dynamicmemory_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.0.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_DynamicMemory_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_ethercatdiag_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_EtherCATDiag_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_eventlogger_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.6.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_EventLogger_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_iolink_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_IOLink_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_jsonxml_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.15.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_JsonXml_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_mc2_advancedhoming_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.7.7",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_MC2_AdvancedHoming_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_module_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_Module_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_packml_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.2.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_PackML_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_packml_v2_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.2.4",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_PackML_V2_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_packml_v3_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.0.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_PackML_V3_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_3_plc_lib_tc3_physics_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_3_PLC_Lib_Tc3_Physics_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_ads_dll_c_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.1.3",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_ADS-DLL_C_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_ads_net_samples_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_ADS_NET_Samples_EN.pdf"
+        },
+        {
+          "id": "pdf_twincat_nc_error_codes_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "2.5.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TwinCAT_NC_Error_Codes_EN.pdf"
+        },
+        {
+          "id": "pdf_variant_management_en",
+          "kind": "pdf",
+          "product": "TwinCAT",
+          "version": "1.4",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/Variant_Management_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5060_tcnc_fifoaxes_en",
+          "kind": "pdf",
+          "product": "Motion/CNC",
+          "version": "1.5.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5060_TCNC_FIFOAXES_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5065_tc3_motion_control_xfc_xfc_nci_en",
+          "kind": "pdf",
+          "product": "Motion/CNC",
+          "version": "2.5.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5065_TC3_Motion_Control_XFC_XFC_NCI_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5120_tc3_robotics_mxautomation_en",
+          "kind": "pdf",
+          "product": "Motion/CNC",
+          "version": "3.0.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5120_TC3_Robotics_mxAutomation_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5130_tc3_robotics_unival_plc_en",
+          "kind": "pdf",
+          "product": "Motion/CNC",
+          "version": "1.4.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5130_TC3_Robotics_uniVAL_PLC_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5400_tc3_advanced_motion_pack_en",
+          "kind": "pdf",
+          "product": "Motion/CNC",
+          "version": "2.2.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5400_TC3_Advanced_Motion_Pack_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5410_tc3_motion_collision_avoidance_en",
+          "kind": "pdf",
+          "product": "Motion/CNC",
+          "version": "2.9.0",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/TF5410_TC3_Motion_Collision_Avoidance_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5420_tc3_advanced_pick_and_place_en",
+          "kind": "pdf",
+          "product": "Motion/CNC",
+          "version": "1.18.2",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/tf5420_tc3_advanced_pick_and_place_EN.pdf"
+        },
+        {
+          "id": "pdf_tf5430_tc3_planar_motion_en",
+          "kind": "pdf",
+          "product": "Motion/CNC",
+          "version": "1.14.1",
+          "url": "https://download.beckhoff.com/download/document/automation/twincat3/tf5430_tc3_planar_motion_EN.pdf"
+        }
+      ]
+    },
+    {
+      "id": "beckhoff_github",
+      "name": "Beckhoff GitHub",
+      "category": "community",
+      "kind": "github",
+      "enabled": true,
+      "auth": "webvpn",
+      "timeout": 5,
+      "url": "https://github.com/Beckhoff",
+      "note": "requires Edge + webVPN; direct probe is expected to fail without the VPN",
+      "documents": []
+    },
+    {
+      "id": "tcpkg",
+      "name": "TcPkg local feed",
+      "category": "local",
+      "kind": "local",
+      "enabled": true,
+      "auth": "none",
+      "url": "",
+      "note": "installed package versions",
+      "documents": [
+        {
+          "id": "tcpkg_tf5500",
+          "kind": "tcpkg",
+          "product": "MC3",
+          "package": "TF5500.MC3.Base.XAE"
+        },
+        {
+          "id": "tcpkg_te1300",
+          "kind": "tcpkg",
+          "product": "Scope",
+          "package": "TE1300.ScopeViewProfessional.XAE"
+        }
+      ]
+    }
+  ],
+  "github": {
+    "repos": [
+      "Beckhoff/TF5500_Samples",
+      "Beckhoff/TF5560_Samples",
+      "Beckhoff/TC_AI_DOTNET_Samples",
+      "Edge-JB/TwinCAT-XAE-MCP",
+      "Lance0901/AI-TwinCAT-Skill",
+      "Beckhoff-USA-Community/TcAutomation",
+      "Beckhoff-USA-Community/TcDynamicIO",
+      "TcOpenGroup/TcOpen",
+      "stlehmann/pyads",
+      "benhar-dev/twincat-resources",
+      "Beckhoff/TF7xxx_Samples"
+    ],
+    "searches": [
+      "TwinCAT MCP",
+      "TwinCAT agent",
+      "TwinCAT skill",
+      "MC3 LoadControl",
+      "TwinCAT CNC",
+      "TwinCAT HMI",
+      "TwinCAT ADS",
+      "TwinCAT EtherCAT",
+      "TwinCAT Vision"
+    ]
+  }
+}

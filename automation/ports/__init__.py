@@ -1,0 +1,1 @@
+"""Ports define the boundary between domain logic and TwinCAT/Windows adapters."""

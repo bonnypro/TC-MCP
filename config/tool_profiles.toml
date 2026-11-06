@@ -1,0 +1,32 @@
+# Tool-surface profiles for A/B evaluation.
+# tc-minimal is the candidate default; tc-full is the current surface.
+
+[profiles.tc-minimal]
+description = "Small high-signal surface for routine PLC/ADS work"
+tools = [
+  "tc_status",
+  "tc_create",
+  "tc_write_pou",
+  "tc_write_gvl",
+  "tc_build",
+  "tc_activate",
+  "tc_ads_read",
+  "tc_ads_write",
+  "tc_snapshot",
+  "tc_close",
+]
+
+[profiles.tc-load]
+description = "Trusted LoadControl evaluation surface"
+tools = [
+  "tc_create",
+  "tc_write_gvl",
+  "tc_write_pou",
+  "tc_build",
+  "tc_activate",
+  "tc_close",
+]
+
+[profiles.tc-full]
+description = "Current full tc-auto surface"
+tools = ["*"]

@@ -1,0 +1,1 @@
+"""Example PLC programs used by automation tests."""

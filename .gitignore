@@ -1,0 +1,72 @@
+# ---- secrets / local overrides ----
+.env
+.env.*
+*.local.json
+credentials*.json
+secrets*.json
+*.key
+*.pem
+*.pfx
+*.p12
+
+# ---- copyrighted / generated data ----
+# Only data/pdf_versions.json is tracked.
+data/pdfs/
+data/official_text/
+data/raw/
+data/backups/
+data/*.sqlite
+data/*.sqlite-*
+data/update_state.json
+data/audit.jsonl
+data/projects.json
+*.pdf
+
+# ---- TwinCAT generated / licensed template artifacts ----
+templates/**/_Libraries/
+templates/**/_Boot/
+templates/**/_CompileInfo/
+templates/**/*.tmc
+templates/**/*.bak
+templates/**/TrialLicense.tclrs
+
+# ---- runtime and update artifacts ----
+updates/
+vendor/
+runtime/
+tmp/
+*.tmp
+*.log
+
+# ---- Python / test caches ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# ---- Node ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- OS / editor / local backups ----
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.bak
+*.orig
+*.rej

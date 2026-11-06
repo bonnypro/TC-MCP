@@ -1,0 +1,1 @@
+"""Adapters implement ports against Windows, XAE, ADS, and dry-run fakes."""

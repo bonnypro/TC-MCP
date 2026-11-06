@@ -1,0 +1,42 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"],
+  "watcher": {
+    "ignore": [
+      "config/credentials.local.json",
+      "data/pdfs/**",
+      "data/official_text/**",
+      "data/*.sqlite*",
+      "updates/**",
+      "vendor/**",
+      "tmp/**",
+      "runtime/**",
+      "**/__pycache__/**"
+    ]
+  },
+  "tool_output": {
+    "max_lines": 2000,
+    "max_bytes": 51200
+  },
+  "mcp": {
+    "servers": {
+      "tc-auto": {
+        "type": "local",
+        "command": [
+          "python",
+          "scripts/mcp_launcher.py"
+        ]
+      },
+      "tc-mcp": {
+        "type": "local",
+        "command": [
+          "python",
+          "mcp_server.py",
+          "--db",
+          "data/knowledge.sqlite"
+        ],
+        "enabled": true
+      }
+    }
+  }
+}
