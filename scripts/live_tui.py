@@ -57,8 +57,12 @@ def clip(text: str, width: int) -> str:
 
 
 def fit(text: str, width: int) -> str:
-    text = clip(text, width)
-    return text + " " * max(0, width - display_width(text))
+    if width <= 0:
+        return ""
+    if display_width(text) <= width:
+        return text + " " * (width - display_width(text))
+    cut = clip(text, max(0, width - 1))
+    return cut + "…" + " " * max(0, width - display_width(cut) - 1)
 
 
 def enable_ansi() -> None:
@@ -246,7 +250,7 @@ class App:
         if self.code_scroll > max(0, len(code_lines) - 1):
             self.code_scroll = max(0, len(code_lines) - 1)
         visible = code_lines[self.code_scroll : self.code_scroll + max(1, body_h - 2)]
-        right: list[str] = [BOLD + fit(f"CODE  {title}", right_w) + RESET]
+        right: list[str] = [BOLD + fit(f" CODE  {title}", right_w) + RESET]
         for offset, line in enumerate(visible, start=self.code_scroll + 1):
             right.append(fit(f"{offset:>4}  {line}", right_w))
         while len(right) < body_h:
