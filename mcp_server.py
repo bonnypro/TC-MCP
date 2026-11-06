@@ -210,6 +210,12 @@ def handle(server: ToolServer, request: dict) -> dict | None:
 
 
 def serve(db_path: Path) -> int:
+    try:
+        from scripts.mcp_lifecycle import install as install_lifecycle
+
+        install_lifecycle()
+    except Exception:
+        pass
     server = ToolServer(db_path)
     for line in sys.stdin:
         line = line.strip()

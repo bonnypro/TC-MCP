@@ -115,6 +115,19 @@ normal automation requirements.
 - No safety-project writes.
 - One XAE/one ADS session at a time.
 
+## Process lifecycle
+
+MCP servers install `scripts/mcp_lifecycle.py` at startup:
+
+- a Windows kill-on-close job object keeps every child (including a
+  `TcXaeShell` started by `tc-auto`) tied to the server process;
+- a parent watchdog exits the server when OpenCode exits or is killed;
+- normal stdin EOF still closes the `tc-auto` session.
+
+So closing OpenCode does not leave `tc-auto`, `tc-mcp`, `mcp_launcher`, or
+their XAE shells behind. The TwinCAT **runtime service** is deliberately not
+touched; it is a system service, not an MCP child.
+
 ## License
 
 MIT — see `LICENSE`. Third-party notices are in `THIRD_PARTY_NOTICES.md`.
