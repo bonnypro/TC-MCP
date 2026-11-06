@@ -1,0 +1,11 @@
+# F1 knowledge base (PDF-only)
+pypdf==6.21.4
+
+# Optional PDF acceleration: PyMuPDF is AGPL-3.0 or commercial.
+# It is NOT installed by default and NOT distributed with this repository.
+# Install it yourself only if you accept its license:
+#   python -m pip install --user PyMuPDF==1.28.2
+
+# F2 TwinCAT automation (Windows only)
+pywin32==312
+pyads==3.6.0

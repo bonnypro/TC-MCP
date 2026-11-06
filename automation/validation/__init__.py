@@ -1,0 +1,1 @@
+"""Static validation before TwinCAT import."""

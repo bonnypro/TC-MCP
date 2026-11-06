@@ -1,0 +1,190 @@
+# TC-AUTO central automation configuration
+#
+# This file is the single place for operational policy:
+# - dialog watchdog cadence and dialog allow/deny rules
+# - resource guard limits
+# - local-simulation security boundaries
+# - session defaults
+#
+# Runtime code loads it with `automation.core.config.load_config()`.
+# Keep secrets out of this file.
+
+schema = 1
+
+[dialog]
+enabled = true
+watchdog_interval_s = 10.0
+check_immediately = true
+active_only = true
+operation_timeout_s = 30.0
+screenshot = true
+allow_unknown_close = true
+allow_unknown_approve = false
+
+# A rule is evaluated only when its title/body/buttons match.
+# `requires` values are checked against DialogObservation:
+# sandbox, local_target, project_copy, snapshot_available,
+# license_automation, no_edit, no_password, no_checkbox.
+# Rules are ordered; deny is checked before allow.
+
+[[dialog.deny]]
+id = "safety"
+category = "safety"
+action = "human"
+body_any = ["twinsafe", "safety plc", "emergency stop", "e-stop"]
+
+[[dialog.deny]]
+id = "os-security"
+category = "os_security"
+action = "human"
+body_any = ["user account control", "uac", "windows defender", "firewall", "driver", "publisher", "reboot", "restart computer"]
+
+[[dialog.deny]]
+id = "build-error"
+category = "build_error"
+action = "human"
+body_any = ["build failed", "compile error", "syntax error", "unknown type", "error list"]
+
+[[dialog.allow]]
+id = "platform-mismatch"
+category = "activation"
+action = "approve"
+title_any = ["TwinCAT XAE"]
+body_any = ["platform", "TwinCAT OS", "TwinCAT RT", "平台"]
+buttons = ["Retry", "OK", "重试", "确定"]
+requires = ["sandbox", "local_target"]
+max_per_run = 1
+
+[[dialog.allow]]
+id = "activation-local"
+category = "activation"
+action = "approve"
+body_any = ["activate configuration", "old configuration", "overwritten", "激活配置"]
+buttons = ["Yes", "OK", "Confirm", "是", "确定", "确认"]
+requires = ["sandbox", "local_target", "project_copy", "snapshot_available"]
+max_per_run = 1
+
+[[dialog.allow]]
+id = "restart-local"
+category = "restart"
+action = "approve"
+body_any = ["restart twinCAT", "run mode", "restart the system", "运行模式"]
+buttons = ["Yes", "OK", "Confirm", "是", "确定", "确认"]
+requires = ["sandbox", "local_target"]
+max_per_run = 1
+
+[[dialog.allow]]
+id = "download-local"
+category = "download"
+action = "approve"
+body_any = ["download", "load program", "plc program", "下载"]
+buttons = ["Yes", "OK", "Download", "是", "确定"]
+requires = ["sandbox", "local_target", "project_copy"]
+max_per_run = 1
+
+[[dialog.allow]]
+id = "license-trial"
+category = "license"
+action = "approve"
+body_any = ["trial license", "trial licence", "试用", "trial"]
+buttons = ["Yes", "OK", "Continue", "是", "确定"]
+requires = ["sandbox", "license_automation", "no_edit", "no_password"]
+max_per_run = 1
+
+[[dialog.allow]]
+id = "save-copy"
+category = "save"
+action = "approve"
+body_any = ["save changes", "save project", "save configuration", "保存更改"]
+buttons = ["Save", "Yes", "是", "保存"]
+requires = ["sandbox", "project_copy"]
+max_per_run = 1
+
+[[dialog.allow]]
+id = "delete-copy"
+category = "delete"
+action = "approve"
+body_any = ["delete", "remove", "overwrite", "删除", "覆盖"]
+buttons = ["Yes", "OK", "Delete", "是", "确定", "确认"]
+requires = ["sandbox", "project_copy"]
+max_per_run = 1
+
+[[dialog.allow]]
+id = "information"
+category = "informational"
+action = "approve"
+body_any = ["completed", "success", "finished", "information", "完成", "成功"]
+buttons = ["OK", "Close", "确定", "关闭"]
+requires = ["sandbox"]
+max_per_run = 1
+
+# ---------------------------------------------------------------
+# Resource policy
+# ---------------------------------------------------------------
+[resources]
+max_llm_workers = 6
+max_heavy_processes = 4
+max_cpu_percent = 100
+test_cpu_percent = 60
+min_free_memory_gb = 4
+min_free_disk_gb = 100
+task_timeout_s = 300
+
+# ---------------------------------------------------------------
+# Security / local-simulation policy
+# ---------------------------------------------------------------
+[security]
+write_root = "runtime"
+hardware_allowed = false
+allowed_ads_netids = ["127.0.0.1.1.1"]
+allowed_ads_ports = [851]
+forbidden_name_parts = ["safety", "twinsafe", "safeplc"]
+allow_remote_targets = false
+allow_os_dialogs = false
+allow_safety_project_writes = false
+
+# Command gate for future shell/tool execution. These are prefixes or
+# substrings, not regexes. Unknown commands default to deny.
+[security.commands]
+allow_prefixes = [
+  "python -m automation",
+  "python -m unittest",
+  "python -m pytest",
+  "opencode mcp list",
+  "git status",
+  "git diff",
+  "git log",
+]
+deny_substrings = [
+  "format ",
+  "shutdown ",
+  "reg add",
+  "reg delete",
+  "sc create",
+  "sc delete",
+  "bcdedit",
+  "netsh advfirewall",
+  "disable defender",
+  "set-mppreference",
+  "invoke-expression",
+  "curl |",
+  "iwr |",
+  "del /s",
+  "remove-item -recurse",
+]
+
+# ---------------------------------------------------------------
+# Session defaults
+# ---------------------------------------------------------------
+[session]
+template = "templates/minimal/Minimal.sln"
+platform = "TwinCAT OS (x64)"
+configuration = "Release"
+plc_project = "PLC1"
+ads_netid = "127.0.0.1.1.1"
+ads_port = 851
+ads_symbol = "MAIN.bReady"
+output_root = "runtime"
+snapshot_root = "runtime/snapshots"
+archive_root = "runtime/archive"
+report_root = "runtime/reports"
