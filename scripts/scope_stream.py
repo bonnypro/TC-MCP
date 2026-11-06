@@ -7,6 +7,9 @@ buffer over HTTP for the Web UI plugin (and any other local client).
 
 Endpoints:
     GET /scope?after=<seq>&window=<n>   JSON samples + series metadata
+    GET /series                         current variable list
+    POST /series                        {"name","symbol","type"} add/replace
+    DELETE /series?name=<name>          remove a variable
     GET /health                         connection state
 """
 
@@ -35,6 +38,29 @@ class Store:
             self.seq += 1
             self.samples.append({"seq": self.seq, "t": round(time.time(), 4), "v": values})
 
+    def series_list(self) -> list[dict]:
+        with self.lock:
+            return [dict(item) for item in self.series]
+
+    def add_series(self, name: str, symbol: str, kind: str) -> list[dict]:
+        with self.lock:
+            self.series = [
+                item for item in self.series
+                if item["name"] != name and item["symbol"] != symbol
+            ]
+            self.series.append({"name": name, "symbol": symbol, "type": kind})
+            self.samples.clear()
+            self.seq = 0
+            self.error = ""
+            return [dict(item) for item in self.series]
+
+    def remove_series(self, name: str) -> list[dict]:
+        with self.lock:
+            self.series = [item for item in self.series if item["name"] != name]
+            self.samples.clear()
+            self.seq = 0
+            return [dict(item) for item in self.series]
+
     def snapshot(self, after: int, window: int) -> dict:
         with self.lock:
             samples = [item for item in self.samples if item["seq"] > after]
@@ -44,7 +70,7 @@ class Store:
                 "ok": not self.error,
                 "connected": self.connected,
                 "error": self.error,
-                "series": self.series,
+                "series": [dict(item) for item in self.series],
                 "seq": self.seq,
                 "samples": samples,
             }
@@ -66,24 +92,30 @@ def parse_symbols(raw: str) -> list[tuple[str, str, str]]:
     return result
 
 
-def sampler(store: Store, netid: str, port: int, symbols: list[tuple[str, str, str]], interval: float) -> None:
+def sampler(store: Store, netid: str, port: int, interval: float) -> None:
     import pyads
 
     connection = None
     while True:
+        series = store.series_list()
+        if not series:
+            time.sleep(0.2)
+            continue
         try:
             if connection is None:
                 connection = pyads.Connection(netid, port)
                 connection.open()
-                store.series = [{"name": name, "symbol": symbol, "type": kind} for name, symbol, kind in symbols]
                 store.connected = True
                 store.error = ""
             values = []
-            for _, symbol, kind in symbols:
+            for item in series:
+                kind = item["type"]
                 plc_type = getattr(pyads, f"PLCTYPE_{kind}", pyads.PLCTYPE_LREAL)
-                value = connection.read_by_name(symbol, plc_type)
+                value = connection.read_by_name(item["symbol"], plc_type)
                 values.append(float(value))
-            store.add(values)
+            # Drop a sample whose series list changed while reading.
+            if store.series_list() == series:
+                store.add(values)
             time.sleep(max(0.005, interval))
         except Exception as exc:
             store.connected = False
@@ -110,12 +142,13 @@ def main() -> int:
         help="name=SYMBOL[:TYPE], comma separated",
     )
     args = parser.parse_args()
-    symbols = parse_symbols(args.symbols)
+    initial = parse_symbols(args.symbols)
     store = Store()
-    store.series = [{"name": name, "symbol": symbol, "type": kind} for name, symbol, kind in symbols]
+    for name, symbol, kind in initial:
+        store.add_series(name, symbol, kind)
     thread = threading.Thread(
         target=sampler,
-        args=(store, args.netid, args.port, symbols, args.interval),
+        args=(store, args.netid, args.port, args.interval),
         daemon=True,
     )
     thread.start()
@@ -126,15 +159,31 @@ def main() -> int:
             self.send_response(status)
             self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
             self.send_header("Cache-Control", "no-store")
             self.send_header("Content-Length", str(len(body)))
             self.end_headers()
             self.wfile.write(body)
 
+        def _empty(self, status: int = 204) -> None:
+            self.send_response(status)
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+
+        def do_OPTIONS(self) -> None:  # noqa: N802
+            self._empty()
+
         def do_GET(self) -> None:  # noqa: N802
             parsed = urlparse(self.path)
             if parsed.path == "/health":
                 self._json({"ok": not store.error, "connected": store.connected, "error": store.error})
+                return
+            if parsed.path == "/series":
+                self._json({"ok": True, "series": store.series_list()})
                 return
             if parsed.path == "/scope":
                 query = parse_qs(parsed.query)
@@ -146,6 +195,37 @@ def main() -> int:
                 self._json(store.snapshot(after, max(10, min(window, 4000))))
                 return
             self._json({"ok": False, "error": "not found"}, 404)
+
+        def do_POST(self) -> None:  # noqa: N802
+            parsed = urlparse(self.path)
+            if parsed.path != "/series":
+                self._json({"ok": False, "error": "not found"}, 404)
+                return
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                payload = json.loads(self.rfile.read(length).decode("utf-8") or "{}")
+                symbol = str(payload.get("symbol", "")).strip()
+                if not symbol:
+                    raise ValueError("symbol is required")
+                name = str(payload.get("name", "")).strip() or symbol.split(".")[-1]
+                kind = str(payload.get("type", "LREAL")).upper()
+                series = store.add_series(name, symbol, kind)
+            except Exception as exc:
+                self._json({"ok": False, "error": str(exc)}, 400)
+                return
+            self._json({"ok": True, "series": series})
+
+        def do_DELETE(self) -> None:  # noqa: N802
+            parsed = urlparse(self.path)
+            if parsed.path != "/series":
+                self._json({"ok": False, "error": "not found"}, 404)
+                return
+            query = parse_qs(parsed.query)
+            name = (query.get("name", [""])[0] or "").strip()
+            if not name:
+                self._json({"ok": False, "error": "name is required"}, 400)
+                return
+            self._json({"ok": True, "series": store.remove_series(name)})
 
         def log_message(self, fmt: str, *values: object) -> None:
             return
