@@ -57,9 +57,9 @@ mcp_server.py             knowledge MCP server
 automation_mcp_server.py  tc-auto MCP server
 ```
 
-## Live mode (实操模式)
+## Live mode (实操模式) / Silent mode (静默模式)
 
-Silent mode is the default: no extra output and no event file.
+Silent mode (静默模式) is the default: no extra output and no event file.
 
 To watch an automatic run, start the dashboard and enable live mode:
 
