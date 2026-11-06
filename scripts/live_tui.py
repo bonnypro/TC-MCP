@@ -249,20 +249,14 @@ class App:
         while len(right) < body_h:
             right.append(" " * right_w)
 
-        header = (
-            BOLD
-            + "TC-MCP 实操模式"
-            + RESET
-            + "   "
-            + GREEN
-            + "LIVE"
-            + RESET
-            + f"   {len(self.events)} events   focus={self.focus}   follow={'on' if self.follow else 'off'}"
+        plain_header = (
+            f"TC-MCP 实操模式   LIVE   {len(self.events)} events   "
+            f"focus={self.focus}   follow={'on' if self.follow else 'off'}"
         )
         sub = DIM + fit(str(self.log), columns) + RESET
         footer = DIM + fit("↑/↓ 选择   PgUp/PgDn 滚动   Tab 切换   f 跟随   q 退出", columns) + RESET
 
-        lines: list[str] = [fit(header, columns), sub]
+        lines: list[str] = [BOLD + fit(plain_header, columns) + RESET, sub]
         for row in range(body_h):
             left = timeline[row] if row < len(timeline) else " " * left_w
             # ANSI in the selected row does not count toward display width.
