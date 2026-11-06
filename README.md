@@ -1,3 +1,18 @@
+> **A note from the author**
+>
+> I'm an automation and control engineer with 13 years of experience, mostly on
+> Beckhoff TwinCAT systems. Every line of code in this repository was written by
+> AI, and the project is still an early draft — yet it already writes PLC code
+> that makes me feel outclassed, and it drives TwinCAT 3.1.4026.27 entirely on
+> its own.
+>
+> My goal is a fully automated programming system that never requires TwinCAT 3
+> to be opened by hand — the same way I haven't opened Visual Studio in years.
+> I'll let you know when I get there. Until then: enjoy what AI makes possible,
+> before it takes your job.
+
+---
+
 # TC-MCP — TwinCAT 3 MCP servers
 
 Two MCP servers for TwinCAT 3:
@@ -12,6 +27,15 @@ The automation layer is a small ports-and-adapters package under `automation/`
 (Python 3.15, pywin32 + pyads). It owns one local XAE instance and one ADS
 session at a time and targets the local UM simulation
 (`127.0.0.1.1.1:851`).
+
+## DSH live panel
+
+![TwinCAT live panel in the DSH right sidebar](docs/assets/dsh-live-panel.png)
+
+The right sidebar shows the editable PLC source with its POU selector and
+run/stop controls above a live ADS scope with pause, clear, and add-variable
+controls. The panel talks to `scripts/code_server.py` and
+`scripts/scope_stream.py`.
 
 ## Requirements
 
