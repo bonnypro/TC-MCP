@@ -123,14 +123,17 @@ def _code_of(event: dict) -> str:
 def _summary(event: dict) -> str:
     data = event.get("data") or {}
     code = _code_of(event)
+    message = str(event.get("message", ""))
     if code:
-        return f"{event.get('message', '')}  ({len(code.splitlines())} lines)"
+        return f"{message}  ({len(code.splitlines())} lines)"
+    if message:
+        return message
     if data:
         try:
             return json.dumps(data, ensure_ascii=False)[:160]
         except Exception:
             return str(data)[:160]
-    return str(event.get("message", ""))
+    return ""
 
 
 def select_default(events: list[dict]) -> int:
