@@ -72,6 +72,7 @@ def plc_state() -> int | None:
 class Runner:
     def __init__(self) -> None:
         self.lock = threading.Lock()
+        self.cancel = threading.Event()
         self.busy = False
         self.error = ""
         self.message = "idle"
@@ -99,6 +100,7 @@ class Runner:
             except ValueError as exc:
                 return False, str(exc)
             self.busy = True
+            self.cancel.clear()
             self.error = ""
             self.message = "starting"
             self.code = code
@@ -115,6 +117,12 @@ class Runner:
         except Exception:
             pass
 
+    def _abort_if_cancelled(self) -> bool:
+        if not self.cancel.is_set():
+            return False
+        self._set(message="stopped")
+        return True
+
     def _run(self, code: str) -> None:
         session = None
         try:
@@ -123,21 +131,32 @@ class Runner:
             from automation.services.session import AutomationSession
 
             session = AutomationSession()
+            if self._abort_if_cancelled():
+                return
             self._set(message="creating project")
             self._log("create project")
             session.create("panel-run", template=str(TEMPLATE))
+            if self._abort_if_cancelled():
+                return
             declaration, implementation = split_st(code)
             self._set(message="writing PLC code")
             self._log("write POU")
             session.write_pou("MAIN", declaration, implementation, "program")
+            if self._abort_if_cancelled():
+                return
             self._set(message="building")
             self._log("build")
             build = session.build()
             if not build["ok"]:
                 raise RuntimeError(f"build failed: {build.get('errors')}")
+            if self._abort_if_cancelled():
+                return
             self._set(message="activating")
             self._log("activate")
             session.activate_with_retry()
+            if self._abort_if_cancelled():
+                self._write_stop()
+                return
             self._set(message="running", error="")
             self._log("running")
         except Exception as exc:
