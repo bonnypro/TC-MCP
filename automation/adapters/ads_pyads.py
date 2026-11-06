@@ -21,14 +21,22 @@ class PyadsAdapter:
         self.retries = retries
         self._connection = None
 
-    def ensure_running(self) -> None:
+    def ensure_running(self, timeout_s: float = 120.0, poll_s: float = 0.5) -> None:
+        """Bring the local simulation PLC to RUN within ``timeout_s``.
+
+        Activation restarts the TwinCAT system, so the PLC port can be absent
+        for tens of seconds.  A fixed retry count used to give up too early
+        (Win32 error 12); this waits on a deadline and reconnects after every
+        failure so a half-open ADS handle cannot poison later calls.
+        """
         import pyads
         from pyads import pyads_ex
 
-        connection = self._connect()
-        last_error = None
-        for _ in range(self.retries):
+        deadline = time.monotonic() + max(0.1, timeout_s)
+        last_error: Exception | None = None
+        while time.monotonic() < deadline:
             try:
+                connection = self._connect()
                 state = connection.read_state()
                 if state[0] == pyads.ADSSTATE_RUN:
                     return
@@ -40,15 +48,17 @@ class PyadsAdapter:
                     0,
                     pyads.PLCTYPE_BOOL,
                 )
-                for _ in range(20):
-                    if connection.read_state()[0] == pyads.ADSSTATE_RUN:
-                        return
-                    time.sleep(0.1)
-                raise RuntimeError("PLC did not confirm RUN state")
+                last_error = None
             except Exception as exc:
                 last_error = exc
-                time.sleep(0.5)
-        raise RuntimeError(f"could not start local simulation PLC: {last_error}") from last_error
+                self.close()
+            time.sleep(max(0.05, poll_s))
+        detail = (
+            last_error
+            if last_error is not None
+            else f"PLC did not reach RUN within {timeout_s:.0f}s"
+        )
+        raise RuntimeError(f"could not start local simulation PLC: {detail}") from last_error
 
     def system_state(self) -> tuple[int, int]:
         """Read the local TwinCAT system service state on port 10000."""
@@ -62,7 +72,12 @@ class PyadsAdapter:
             connection.close()
 
     def wait_for_service(self, timeout_s: float = 120.0) -> tuple[int, int]:
-        """Wait until the system service answers in CONFIG or RUN."""
+        """Wait until the system service answers in CONFIG, RECONFIG or RUN.
+
+        The user-mode runtime reports RECONFIG (15) while it waits for an
+        activation; treating that as "not answering" made every activation
+        wait out the full timeout.
+        """
         import pyads
 
         deadline = time.monotonic() + max(1.0, timeout_s)
@@ -70,12 +85,36 @@ class PyadsAdapter:
         while time.monotonic() < deadline:
             try:
                 state = self.system_state()
-                if state[0] in {pyads.ADSSTATE_CONFIG, pyads.ADSSTATE_RUN}:
+                if state[0] in {
+                    pyads.ADSSTATE_CONFIG,
+                    pyads.ADSSTATE_RECONFIG,
+                    pyads.ADSSTATE_RUN,
+                }:
                     return state
             except Exception as exc:
                 last_error = exc
             time.sleep(1.0)
         raise RuntimeError(f"TwinCAT system service not ready: {last_error}")
+
+    def wait_for_run(self, timeout_s: float = 60.0) -> tuple[int, int]:
+        """Wait until the system service reaches RUN (not CONFIG/RECONFIG).
+
+        A PLC can be RUN while the system is still in RECONFIG; activating the
+        external setpoint generator in that state latches 0x4004.
+        """
+        import pyads
+
+        deadline = time.monotonic() + max(1.0, timeout_s)
+        last_error: Exception | None = None
+        while time.monotonic() < deadline:
+            try:
+                state = self.system_state()
+                if state[0] == pyads.ADSSTATE_RUN:
+                    return state
+            except Exception as exc:
+                last_error = exc
+            time.sleep(1.0)
+        raise RuntimeError(f"TwinCAT system did not reach RUN: {last_error}")
 
     def symbols_ready(self) -> bool:
         """Return true only when the PLC publishes a non-empty symbol table."""
@@ -119,7 +158,7 @@ class PyadsAdapter:
             if before is None:
                 raise RuntimeError("TwinCAT system service did not answer on port 10000")
 
-            if before[0] != pyads.ADSSTATE_CONFIG:
+            if before[0] not in {pyads.ADSSTATE_CONFIG, pyads.ADSSTATE_RECONFIG}:
                 while time.monotonic() < deadline:
                     try:
                         connection.write_control(
@@ -139,7 +178,7 @@ class PyadsAdapter:
                 except Exception:
                     time.sleep(0.25)
                     continue
-                if observed[0] == pyads.ADSSTATE_CONFIG:
+                if observed[0] in {pyads.ADSSTATE_CONFIG, pyads.ADSSTATE_RECONFIG}:
                     if settle_s > 0:
                         time.sleep(settle_s)
                     return {"before": before, "after": observed, "settled_s": settle_s}
@@ -164,6 +203,32 @@ class PyadsAdapter:
                 last_error = exc
                 time.sleep(0.5)
         raise RuntimeError(f"ADS read failed for {symbol}: {last_error}") from last_error
+
+    def read_array(self, symbol: str, size: int, value_type: str = "LREAL") -> list[float]:
+        """Read a whole ADS array in one request.
+
+        A 300-element LREAL buffer covers a 3 s capture at the 10 ms PLC cycle
+        without paying one ADS round-trip per sample.
+        """
+        import pyads
+
+        if size <= 0:
+            raise ValueError("array size must be positive")
+        factory = getattr(pyads, f"PLCTYPE_ARR_{value_type.upper()}", None)
+        if factory is None:
+            raise ValueError(f"unsupported ADS array type: {value_type}")
+        plc_type = factory(size)
+
+        connection = self._connect()
+        last_error = None
+        for _ in range(self.retries):
+            try:
+                values = connection.read_by_name(symbol, plc_type)
+                return [float(value) for value in values]
+            except Exception as exc:
+                last_error = exc
+                time.sleep(0.5)
+        raise RuntimeError(f"ADS array read failed for {symbol}: {last_error}") from last_error
 
     def wait_symbols(self, timeout_s: float = 30.0) -> list[dict]:
         """Wait until the runtime publishes a non-empty symbol table."""

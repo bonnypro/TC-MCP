@@ -142,8 +142,7 @@ class Runner:
             return f"simulation activated on {result.target_netid}"
 
         if task.kind is TaskKind.ADS_TEST:
-            self.ads.ensure_running()
-            value = self.ads.read_symbol(spec.ads_symbol, spec.ads_type)
+            value = self._read_ads_value(spec, solution)
             if spec.expected_ads_value is not None and value != spec.expected_ads_value:
                 raise RuntimeError(
                     f"ADS assertion failed: {spec.ads_symbol}={value!r}, "
@@ -156,6 +155,24 @@ class Runner:
             return "snapshot scheduled"
 
         raise RuntimeError(f"unsupported task kind: {task.kind}")
+
+    def _read_ads_value(self, spec, solution):
+        """Read the ADS value, re-activating once if the restart window failed.
+
+        A TwinCAT activation restarts the system.  The PLC port can stay down
+        or come up with an empty symbol table, so one explicit re-activation is
+        the documented recovery instead of failing the whole run.
+        """
+        try:
+            self.ads.ensure_running()
+            return self.ads.read_symbol(spec.ads_symbol, spec.ads_type)
+        except RuntimeError as exc:
+            if solution is None:
+                raise
+            self._audit("ads.retry", error=str(exc))
+            self.xae.activate_simulation(solution, spec)
+            self.ads.ensure_running()
+            return self.ads.read_symbol(spec.ads_symbol, spec.ads_type)
 
     def _write_report(self, report: RunReport, output_dir: Path) -> Path:
         output_dir.mkdir(parents=True, exist_ok=True)

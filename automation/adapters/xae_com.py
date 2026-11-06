@@ -12,7 +12,50 @@ DEFAULT_PROG_ID = "TcXaeShell.DTE.17.0"
 TEMPLATE_ROOT = Path(__file__).resolve().parent.parent.parent / "templates"
 SKIP_NAMES = {"_Boot", "_CompileInfo", ".git", ".vs", "bin", "obj"}
 SKIP_SUFFIXES = (".tmc", ".bak", ".tclrs")
-COM_REJECTED = {-2147418111, -2147417846, -2147417845, -2147418110, -2147024891}
+COM_REJECTED = {
+    -2147418111,
+    -2147417846,
+    -2147417845,
+    -2147418110,
+    -2147024891,
+    -2147352573,  # DISP_E_MEMBERNOTFOUND: the automation tree is not ready yet
+}
+
+
+def _is_error_diagnostic(item: Diagnostic) -> bool:
+    level = item.level.casefold()
+    return "error" in level or "high" in level
+
+
+BUILD_ERROR_RE = re.compile(
+    r"^(?P<file>.+?)\((?P<line>\d+)\)\s*:\s*(?P<level>error|warning)\s*:\s*"
+    r"(?P<code>[A-Za-z0-9_]+)\s*:\s*(?P<message>.+)$",
+    re.IGNORECASE,
+)
+
+
+def _parse_build_output(text: str) -> list[Diagnostic]:
+    """Extract PLC compiler errors from the XAE Build output pane.
+
+    The ErrorList often only carries the generic MSBuild message; the Build
+    pane keeps ``file(line) : error: C0046: ...`` lines with the real cause.
+    """
+    diagnostics: list[Diagnostic] = []
+    for raw in text.splitlines():
+        match = BUILD_ERROR_RE.match(raw.strip())
+        if not match:
+            continue
+        diagnostics.append(
+            Diagnostic(
+                level=match.group("level").casefold(),
+                message=f"{match.group('code')}: {match.group('message').strip()}",
+                file=match.group("file").strip(),
+                line=int(match.group("line")),
+                column=0,
+                project="",
+            )
+        )
+    return diagnostics
 
 
 def _new_pou_id() -> str:
@@ -113,9 +156,14 @@ class XaeDteAdapter:
         self._ensure_com()
         if self._dte is None:
             if self._has_running_xae():
-                raise RuntimeError(
-                    "a TcXaeShell instance is already running; close it before automation"
-                )
+                # A previous session may still be shutting down; give it a
+                # moment before declaring the workspace busy.
+                try:
+                    self.wait_for_exit(5.0)
+                except Exception as exc:
+                    raise RuntimeError(
+                        "a TcXaeShell instance is already running; close it before automation"
+                    ) from exc
             import win32com.client
 
             self._dte = win32com.client.Dispatch(self.prog_id)
@@ -221,7 +269,28 @@ class XaeDteAdapter:
 
         self._retry(build_once)
         last = int(self._dte.Solution.SolutionBuild.LastBuildInfo)
-        diagnostics = self._read_diagnostics()
+        diagnostics = list(self._read_diagnostics())
+        if last != 0:
+            if not any(_is_error_diagnostic(item) for item in diagnostics):
+                # PLC compiler errors can show up in the ErrorList a moment
+                # after LastBuildInfo flips.
+                for _ in range(4):
+                    time.sleep(0.4)
+                    retry = self._read_diagnostics()
+                    if retry:
+                        diagnostics = list(retry)
+                    if any(_is_error_diagnostic(item) for item in diagnostics):
+                        break
+            seen = {
+                (item.file.casefold(), item.line, item.message.casefold())
+                for item in diagnostics
+            }
+            for extra in self._read_build_output():
+                key = (extra.file.casefold(), extra.line, extra.message.casefold())
+                if key not in seen:
+                    seen.add(key)
+                    diagnostics.append(extra)
+        diagnostics = tuple(diagnostics)
         error_count = sum(
             1 for item in diagnostics if "high" in item.level.casefold() or "error" in item.level.casefold()
         )
@@ -429,13 +498,18 @@ class XaeDteAdapter:
             self._dte = None
             self._project = None
             self._sysman = None
-            try:
-                dte.Quit()
-            finally:
+            for _ in range(3):
                 try:
-                    self.wait_for_exit(15.0)
+                    dte.Quit()
                 except Exception:
                     pass
+                try:
+                    self.wait_for_exit(10.0)
+                    break
+                except Exception:
+                    continue
+            if self._xae_process_running():
+                self._terminate_shell()
         if self._com_initialized:
             try:
                 import pythoncom
@@ -507,6 +581,26 @@ class XaeDteAdapter:
         if cls._xae_process_running():
             raise RuntimeError("TcXaeShell did not exit within the timeout")
 
+    @staticmethod
+    def _terminate_shell() -> None:
+        """Force-close a TcXaeShell that ignored Quit.
+
+        The adapter refuses to attach to a pre-existing instance, so any shell
+        still alive at this point is the one this adapter started.
+        """
+        import subprocess
+
+        try:
+            subprocess.run(
+                ["taskkill", "/IM", "TcXaeShell.exe", "/F", "/T"],
+                capture_output=True,
+                text=True,
+                timeout=20,
+                check=False,
+            )
+        except Exception:
+            pass
+
     def _nested_project(self, spec: ProjectSpec):
         last_error = None
         for _ in range(30):
@@ -545,6 +639,40 @@ class XaeDteAdapter:
         if int(item.ChildCount) > count:
             node["children_truncated"] = True
         return node
+
+    def _read_build_output(self) -> list[Diagnostic]:
+        """Read the XAE Build output pane and parse PLC compiler errors."""
+        import json
+        import subprocess
+
+        script = Path(__file__).resolve().parent.parent.parent / "scripts" / "read_build_output.ps1"
+        if not script.is_file():
+            return []
+        try:
+            proc = subprocess.run(
+                ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", str(script)],
+                capture_output=True,
+                text=True,
+                encoding="utf-8-sig",
+                errors="replace",
+                timeout=30,
+                check=False,
+            )
+        except Exception:
+            return []
+        payload = proc.stdout.strip()
+        if not payload:
+            return []
+        try:
+            data = json.loads(payload)
+        except Exception:
+            return []
+        rows = data if isinstance(data, list) else [data]
+        diagnostics: list[Diagnostic] = []
+        for row in rows:
+            if isinstance(row, dict):
+                diagnostics.extend(_parse_build_output(str(row.get("text", ""))))
+        return diagnostics
 
     def _read_diagnostics(self) -> tuple[Diagnostic, ...]:
         import json
@@ -631,12 +759,35 @@ class XaeDteAdapter:
 
     @staticmethod
     def _find_child(item, name: str):
-        for index in range(1, int(item.ChildCount) + 1):
-            child = XaeDteAdapter._retry(lambda index=index: item.Child(index))
-            child_name = XaeDteAdapter._retry(lambda child=child: str(child.Name))
-            if child_name.casefold() == name.casefold():
-                return child
-        raise LookupError(f"child {name!r} not found under {item.PathName}")
+        """Return a named child, tolerating transient dead COM wrappers.
+
+        A freshly opened solution can hand out one or two child objects whose
+        dynamic wrapper is not usable yet (``AttributeError: Child.Name``).
+        Re-enumerating the folder after a short delay yields fresh wrappers.
+        """
+        import pywintypes
+
+        last_error: Exception | None = None
+        for _ in range(20):
+            try:
+                for index in range(1, int(item.ChildCount) + 1):
+                    child = XaeDteAdapter._retry(lambda index=index: item.Child(index))
+                    child_name = XaeDteAdapter._retry(
+                        lambda child=child: str(child.Name)
+                    )
+                    if child_name.casefold() == name.casefold():
+                        return child
+                try:
+                    where = item.PathName
+                except Exception:
+                    where = "<unknown>"
+                raise LookupError(f"child {name!r} not found under {where}")
+            except (AttributeError, pywintypes.com_error) as exc:
+                last_error = exc
+                time.sleep(0.5)
+        raise RuntimeError(
+            f"could not enumerate children looking for {name!r}: {last_error}"
+        ) from last_error
 
     @staticmethod
     def _ignore(directory: str, names: list[str]) -> set[str]:

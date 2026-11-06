@@ -16,6 +16,8 @@ from automation.adapters.xae_com import XaeDteAdapter
 from automation.core.config import load_config
 from automation.core.models import ProjectSpec
 from automation.examples.loadcontrol import loadcontrol_scope_gvl, loadcontrol_sources
+from automation.observability import live
+from automation.services.licensing import require_licenses
 from automation.services.revisions import project_revision
 from automation.security.audit import AuditLog
 from automation.security.lock import RunLock
@@ -37,6 +39,7 @@ class AutomationSession:
         self.lock: RunLock | None = None
         self.policy = SafetyPolicy()
         self.audit = AuditLog()
+        self.requires_mc3_licenses = False
 
     def create(
         self,
@@ -50,6 +53,7 @@ class AutomationSession:
         lock.__enter__()
         try:
             template = template or self.config.session.template
+            self.requires_mc3_licenses = self.needs_mc3_licenses(template)
             platform = platform or self.config.session.platform
             configuration = configuration or self.config.session.configuration
             stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -76,11 +80,18 @@ class AutomationSession:
             self.xae = xae
             self.spec = spec
             self.workspace = workspace
+            live.emit(
+                "phase",
+                f"create project {name}",
+                template=str(template),
+                workspace=str(workspace),
+            )
             solution = xae.prepare_project(spec)
             self.solution = solution
             xae.open_solution(solution)
             self.ads = PyadsAdapter(spec.ads_netid, spec.ads_port)
             self._audit("session.create", project=name, solution=str(solution))
+            live.emit("ready", f"project {name} opened", solution=str(solution))
             return self.status()
         except Exception:
             try:
@@ -103,6 +114,25 @@ class AutomationSession:
         report = review_st(declaration, implementation)
         if not report.ok:
             raise ValueError(f"PLC review rejected {name}: {[issue.message for issue in report.issues]}")
+        method_code = "\n\n".join(
+            f"// method {item.get('name', '?')}\n{item.get('declaration', '')}\n{item.get('implementation', '')}"
+            for item in (methods or [])
+        )
+        code = declaration
+        if implementation:
+            code += "\n\n" + implementation
+        if method_code:
+            code += "\n\n" + method_code
+        live.emit(
+            "write_pou",
+            f"write {kind} {name}",
+            name=name,
+            kind=kind,
+            declaration=declaration,
+            implementation=implementation,
+            methods=methods or [],
+            code=code,
+        )
         self.xae.write_pou(
             self.solution,
             self.spec,
@@ -121,12 +151,19 @@ class AutomationSession:
 
     def build(self) -> dict:
         self._ensure_open()
+        live.emit("phase", "build")
         before = project_revision(self.solution.parent)
         result = asdict(self.xae.build(self.solution, self.spec))
         after = project_revision(self.solution.parent)
         result["revision_before"] = before["revision"]
         result["revision_after"] = after["revision"]
         self._audit("build", ok=result["ok"], errors=result["errors"], revision=after["revision"])
+        live.emit(
+            "build",
+            "build OK" if result["ok"] else "build FAILED",
+            ok=result["ok"],
+            errors=result["errors"],
+        )
         return result
 
     def verify_symbols(self, symbols: list[str]) -> dict:
@@ -142,10 +179,59 @@ class AutomationSession:
 
     def activate(self) -> dict:
         self._ensure_open()
+        if self.requires_mc3_licenses:
+            require_licenses()
+        live.emit("phase", "activate simulation")
         result = self.xae.activate_simulation(self.solution, self.spec)
         self.ads.ensure_running()
         self._audit("activate", target=result.target_netid)
+        live.emit("activate", f"activated {result.target_netid}", target=result.target_netid)
         return asdict(result)
+
+    @staticmethod
+    def needs_mc3_licenses(template: str | Path | None) -> bool:
+        """Return True for templates that start an MC3 axis (need TF5500).
+
+        The check is intentionally conservative: only templates whose path
+        mentions ``mc3`` are gated, so the plain minimal project keeps working
+        with a PLC/ADS-only license.
+        """
+        if not template:
+            return False
+        return "mc3" in Path(template).as_posix().casefold()
+
+    def activate_with_retry(self, attempts: int = 3) -> dict:
+        """Activate the simulation, retrying the post-restart window.
+
+        Activation restarts the TwinCAT system.  The PLC port can be missing
+        for a while and the runtime can come up with an empty symbol table, so
+        retry with an explicit RECONFIG before giving up.
+        """
+        last_error: Exception | None = None
+        for attempt in range(1, attempts + 1):
+            try:
+                state = self.ads.wait_for_service(120.0)
+                if state[0] == 5 and not self.ads.symbols_ready():
+                    self._audit("activate.reconfigure", reason="plc symbols empty")
+                    self.ads.reconfigure()
+                result = self.activate()
+                self.ads.wait_symbols(60.0)
+                self.ads.wait_for_run(60.0)
+                return result
+            except RuntimeError as exc:
+                last_error = exc
+                self._audit("activate.retry", attempt=attempt, error=str(exc))
+                live.emit("retry", f"activation attempt {attempt} failed", attempt=attempt, error=str(exc))
+                if attempt >= attempts:
+                    break
+                try:
+                    self.ads.reconfigure(timeout_s=90.0, settle_s=3.0)
+                except Exception as reconfigure_error:
+                    self._audit("activate.reconfigure", error=str(reconfigure_error))
+                time.sleep(5.0)
+        raise RuntimeError(
+            f"TwinCAT activation failed after {attempts} attempts: {last_error}"
+        )
 
     def ads_state(self) -> dict:
         self._ensure_open()
@@ -160,6 +246,7 @@ class AutomationSession:
     def ads_write(self, symbol: str, value: object, value_type: str = "BOOL") -> dict:
         self._ensure_open()
         self.ads.ensure_running()
+        live.emit("ads_write", f"{symbol} := {value}", symbol=symbol, type=value_type, value=value)
         self.ads.write_symbol(symbol, value, value_type)
         self._audit("ads.write", symbol=symbol, type=value_type, value=value)
         return {"symbol": symbol, "type": value_type, "value": value}
@@ -183,6 +270,7 @@ class AutomationSession:
     def ads_write_many(self, writes: list[dict]) -> dict:
         self._ensure_open()
         self.ads.ensure_running()
+        live.emit("ads_write_many", f"{len(writes)} ADS writes", writes=writes)
         results = []
         for item in writes:
             symbol = str(item["symbol"])
@@ -242,6 +330,7 @@ class AutomationSession:
         result = self.xae.export_archive(self.solution, self.spec, path, scope)
         digest = hashlib.sha256(result.read_bytes()).hexdigest()
         self._audit("archive.export", path=str(result), scope=scope)
+        live.emit("archive", f"exported {path.name}", path=str(result), scope=scope)
         return {"path": str(result), "scope": scope, "sha256": digest, "size": result.stat().st_size}
 
     def snapshot(self, label: str = "snapshot") -> dict:
@@ -265,6 +354,7 @@ class AutomationSession:
                 archive.write(file, file.relative_to(root).as_posix())
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         self._audit("snapshot.create", path=str(path), label=label)
+        live.emit("snapshot", f"snapshot {path.name}", path=str(path), label=label)
         return {"path": str(path), "sha256": digest, "size": path.stat().st_size}
 
     def restore(self, snapshot_path: str) -> dict:
@@ -334,6 +424,7 @@ class AutomationSession:
         self._check_revision(expected_revision)
         if not declaration.strip():
             raise ValueError("DUT declaration must not be empty")
+        live.emit("write_dut", f"write DUT {name}", name=name, kind=kind, code=declaration)
         self.xae.write_dut(self.solution, self.spec, name, declaration, kind)
         self._audit("dut.write", name=name, kind=kind)
         return {"name": name, "kind": kind, "written": True}
@@ -348,6 +439,7 @@ class AutomationSession:
         self._check_revision(expected_revision)
         if not declaration.strip():
             raise ValueError("GVL declaration must not be empty")
+        live.emit("write_gvl", f"write GVL {name}", name=name, code=declaration)
         self.xae.write_gvl(self.solution, self.spec, name, declaration)
         self._audit("gvl.write", name=name)
         return {"name": name, "written": True}
@@ -422,6 +514,8 @@ class AutomationSession:
         }
 
     def close(self) -> dict:
+        if self.workspace is not None:
+            live.emit("close", "close session", workspace=str(self.workspace))
         errors: list[str] = []
         if self.ads is not None:
             try:
@@ -448,6 +542,7 @@ class AutomationSession:
         self.spec = None
         self.solution = None
         self.workspace = None
+        self.requires_mc3_licenses = False
         return {"closed": True, "errors": errors}
 
     def run_loadcontrol(

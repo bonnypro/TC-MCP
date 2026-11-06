@@ -92,12 +92,16 @@ class DryRunAds:
 
     value: object = True
     calls: list[str] = field(default_factory=list)
+    fail_reads: int = 0
 
     def ensure_running(self) -> None:
         self.calls.append("ensure_running")
 
     def read_symbol(self, symbol: str, value_type: str = "BOOL") -> object:
         self.calls.append(f"read_symbol:{symbol}")
+        if self.fail_reads > 0:
+            self.fail_reads -= 1
+            raise RuntimeError("ADS port not ready (dry run)")
         return self.value
 
     def write_symbol(self, symbol: str, value: object, value_type: str = "BOOL") -> None:
