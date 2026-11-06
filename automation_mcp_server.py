@@ -672,6 +672,12 @@ def handle(server: ToolServer, request: dict) -> dict | None:
 
 
 def serve() -> int:
+    try:
+        from scripts.mcp_lifecycle import install as install_lifecycle
+
+        install_lifecycle()
+    except Exception:
+        pass
     profile = os.environ.get("TC_MCP_TOOL_PROFILE") or None
     try:
         allowed = resolve_allowed_tools(profile)

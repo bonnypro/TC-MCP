@@ -60,6 +60,9 @@ def main() -> int:
         print(f"tc-auto launcher: server not found: {target.server}", file=sys.stderr)
         return 2
 
+    from scripts.mcp_lifecycle import install as install_lifecycle
+
+    install_lifecycle()
     command = [sys.executable, str(target.server), *args.server_args]
     env = dict(os.environ)
     if args.profile:
