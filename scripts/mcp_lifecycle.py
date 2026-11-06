@@ -125,7 +125,8 @@ def watch_parent(interval: float = 1.0) -> bool:
         if os.name == "nt":
             handle = _KERNEL32.OpenProcess(_SYNCHRONIZE, False, parent)
             if not handle:
-                return
+                # The parent already disappeared before the watchdog started.
+                os._exit(0)
             try:
                 while _KERNEL32.WaitForSingleObject(handle, 0) == _WAIT_TIMEOUT:
                     time.sleep(interval)
