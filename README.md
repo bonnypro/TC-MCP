@@ -76,6 +76,15 @@ exports are shown as separate steps. Events are appended to
 `runtime/live/events.jsonl` (`TC_MCP_LIVE_LOG` overrides the path).
 `TC_MCP_LIVE_CODE=0` suppresses the console code preview.
 
+Prefer a terminal UI? Run instead:
+
+```powershell
+python scripts/live_tui.py
+```
+
+Keys: `↑/↓` select, `PgUp/PgDn` scroll code, `Tab` switch pane, `f` follow,
+`q` quit. It uses the same event log and needs no extra packages.
+
 ## Scope
 
 - Local UM simulation only; hardware activation stays manual.
