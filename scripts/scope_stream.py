@@ -61,6 +61,11 @@ class Store:
             self.seq = 0
             return [dict(item) for item in self.series]
 
+    def clear(self) -> None:
+        with self.lock:
+            self.samples.clear()
+            self.seq = 0
+
     def snapshot(self, after: int, window: int) -> dict:
         with self.lock:
             samples = [item for item in self.samples if item["seq"] > after]
@@ -198,6 +203,10 @@ def main() -> int:
 
         def do_POST(self) -> None:  # noqa: N802
             parsed = urlparse(self.path)
+            if parsed.path == "/scope/clear":
+                store.clear()
+                self._json({"ok": True})
+                return
             if parsed.path != "/series":
                 self._json({"ok": False, "error": "not found"}, 404)
                 return
