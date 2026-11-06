@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import threading
 import time
@@ -24,8 +25,9 @@ if str(ROOT) not in sys.path:
 TEMPLATE = ROOT / "templates" / "minimal" / "Minimal.sln"
 NETID = "127.0.0.1.1.1"
 PLC_PORT = 851
+PROJECT_NAME = "TwinCATPanel"
 
-DEFAULT_CODE = """PROGRAM MAIN
+DEFAULT_MAIN = """PROGRAM MAIN
 VAR
     rPhase : LREAL;
     rSine : LREAL;
@@ -38,6 +40,57 @@ IF rPhase > 6.283185 THEN
 END_IF
 rSine := SIN(rPhase) * 10.0;
 rCos := COS(rPhase) * 10.0;"""
+
+DEFAULT_AUX = """FUNCTION_BLOCK FB_Aux
+VAR_INPUT
+    rIn : LREAL;
+END_VAR
+VAR_OUTPUT
+    rOut : LREAL;
+END_VAR
+
+rOut := rIn * 2.0;"""
+
+DEFAULT_POUS = [
+    {"name": "MAIN", "kind": "program", "code": DEFAULT_MAIN},
+    {"name": "FB_Aux", "kind": "function_block", "code": DEFAULT_AUX},
+]
+DEFAULT_CODE = DEFAULT_MAIN
+
+
+def kind_of(declaration: str) -> str:
+    upper = declaration.upper()
+    if upper.startswith("FUNCTION_BLOCK"):
+        return "function_block"
+    if upper.startswith("FUNCTION"):
+        return "function"
+    return "program"
+
+
+def normalize_pous(pous: list[dict]) -> list[dict]:
+    if not isinstance(pous, list) or not pous:
+        raise ValueError("at least one POU is required")
+    result = []
+    seen = set()
+    for item in pous:
+        name = str(item.get("name", "")).strip()
+        if not re.match(r"^[A-Za-z_][A-Za-z0-9_]*$", name):
+            raise ValueError(f"invalid POU name: {name!r}")
+        if name.upper() in seen:
+            raise ValueError(f"duplicate POU: {name}")
+        code = str(item.get("code", "")).strip()
+        declaration, implementation = split_st(code)
+        result.append({
+            "name": name,
+            "kind": kind_of(declaration),
+            "declaration": declaration,
+            "implementation": implementation,
+            "code": code,
+        })
+        seen.add(name.upper())
+    if "MAIN" not in seen:
+        raise ValueError("a MAIN program is required")
+    return result
 
 
 def split_st(code: str) -> tuple[str, str]:
@@ -76,7 +129,8 @@ class Runner:
         self.busy = False
         self.error = ""
         self.message = "idle"
-        self.code = DEFAULT_CODE
+        self.project = PROJECT_NAME
+        self.pous = [dict(item) for item in DEFAULT_POUS]
 
     def status(self) -> dict:
         with self.lock:
@@ -86,25 +140,29 @@ class Runner:
                 "busy": self.busy,
                 "message": self.message,
                 "error": self.error,
-                "code": self.code,
+                "project": self.project,
+                "pous": [dict(item) for item in self.pous],
                 "plc_state": state,
                 "running": state == 5,
             }
 
-    def start(self, code: str) -> tuple[bool, str]:
+    def start(self, pous: list[dict]) -> tuple[bool, str]:
         with self.lock:
             if self.busy:
                 return False, "a run is already in progress"
             try:
-                split_st(code)
+                normalized = normalize_pous(pous)
             except ValueError as exc:
                 return False, str(exc)
             self.busy = True
             self.cancel.clear()
             self.error = ""
             self.message = "starting"
-            self.code = code
-        thread = threading.Thread(target=self._run, args=(code,), daemon=True)
+            self.pous = [
+                {"name": item["name"], "kind": item["kind"], "code": item["code"]}
+                for item in normalized
+            ]
+        thread = threading.Thread(target=self._run, args=(normalized,), daemon=True)
         thread.start()
         return True, "started"
 
@@ -123,7 +181,7 @@ class Runner:
         self._set(message="stopped")
         return True
 
-    def _run(self, code: str) -> None:
+    def _run(self, pous: list[dict]) -> None:
         session = None
         try:
             self._set(message="starting thread")
@@ -135,15 +193,20 @@ class Runner:
                 return
             self._set(message="creating project")
             self._log("create project")
-            session.create("panel-run", template=str(TEMPLATE))
+            session.create(PROJECT_NAME, template=str(TEMPLATE))
             if self._abort_if_cancelled():
                 return
-            declaration, implementation = split_st(code)
-            self._set(message="writing PLC code")
-            self._log("write POU")
-            session.write_pou("MAIN", declaration, implementation, "program")
-            if self._abort_if_cancelled():
-                return
+            for item in pous:
+                self._set(message=f"writing {item['name']}")
+                self._log(f"write {item['name']} ({item['kind']})")
+                session.write_pou(
+                    item["name"],
+                    item["declaration"],
+                    item["implementation"],
+                    item["kind"],
+                )
+                if self._abort_if_cancelled():
+                    return
             self._set(message="building")
             self._log("build")
             build = session.build()
@@ -177,16 +240,20 @@ class Runner:
             if error is not None:
                 self.error = error
 
-    def stop(self) -> tuple[bool, str]:
+    def _write_stop(self) -> None:
         import pyads
 
+        connection = pyads.Connection(NETID, PLC_PORT)
+        connection.open()
         try:
-            connection = pyads.Connection(NETID, PLC_PORT)
-            connection.open()
-            try:
-                connection.write_control(pyads.ADSSTATE_STOP, 0, 0, pyads.PLCTYPE_BOOL)
-            finally:
-                connection.close()
+            connection.write_control(pyads.ADSSTATE_STOP, 0, 0, pyads.PLCTYPE_BOOL)
+        finally:
+            connection.close()
+
+    def stop(self) -> tuple[bool, str]:
+        self.cancel.set()
+        try:
+            self._write_stop()
             self._set(message="stopped", error="")
             return True, "stopped"
         except Exception as exc:
@@ -244,13 +311,18 @@ def main() -> int:
             try:
                 length = int(self.headers.get("Content-Length", "0"))
                 payload = json.loads(self.rfile.read(length).decode("utf-8") or "{}")
-                code = str(payload.get("code", "")).strip()
-                if not code:
-                    raise ValueError("code is required")
+                pous = payload.get("pous")
+                if not pous:
+                    code = str(payload.get("code", "")).strip()
+                    if not code:
+                        raise ValueError("pous or code is required")
+                    pous = [{"name": "MAIN", "kind": "program", "code": code}]
+                if not isinstance(pous, list):
+                    raise ValueError("pous must be a list")
             except Exception as exc:
                 self._json({"ok": False, "error": str(exc)}, 400)
                 return
-            ok, message = runner.start(code)
+            ok, message = runner.start(pous)
             self._json({"ok": ok, "message": message}, 202 if ok else 409)
 
         def log_message(self, fmt: str, *values: object) -> None:
